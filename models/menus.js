@@ -44,10 +44,82 @@ const template = [{
         label: 'ウィンドウ',
         role: 'window',
         submenu: [{
-            label
+                role: 'minimize'
+            },
+            {
+                role: 'close'
+            },
+        ]
+    },
+    {
+        role: 'help',
+        submenu: [{
+            label: 'Learn more',
+            click() {
+                electron.shell.openExternal('https://github.com/Xx-E4RthQUAkE-xX/Bukket-Collection');
+            },
         }]
-    }
+    },
 ];
+
+if (process.platform === 'darwin') {
+    const name = electron.app.getName();
+    template.unshift({
+        label: name,
+        submenu: [{
+                role: 'about'
+            },
+            {
+                type: 'separator'
+            },
+            {
+                role: 'services',
+                submenu: []
+            },
+            {
+                type: 'separator'
+            },
+            {
+                role: 'hide'
+            },
+            {
+                role: 'hideothers'
+            },
+            {
+                role: 'unhide'
+            },
+            {
+                type: 'separator'
+            },
+            {
+                role: 'quit'
+            },
+        ]
+    });
+
+    template[3].submenu = [{
+            label: '閉じる',
+            accelerator: 'Shift + C',
+            role: 'close'
+        },
+        {
+            label: '最小化',
+            accererator: 'Shift + M',
+            role: 'minimize'
+        },
+        {
+            label: '拡大',
+            role: 'zoom'
+        },
+        {
+            type: 'separator'
+        },
+        {
+            label: '最前面に移動',
+            role: 'front'
+        }
+    ];
+}
 
 const menu = Menu.buildFromTemplate(template);
 Menu.setApplicationMenu(menu);
