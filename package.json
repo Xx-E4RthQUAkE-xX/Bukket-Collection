@@ -1,0 +1,9 @@
+{
+  "name": "Bukket-Collection",
+  "version": "0.1.0a",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "fs-extra": "^4.0.2"
+  }
+}
