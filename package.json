@@ -1,9 +1,11 @@
 {
-  "name": "Bukket-Collection",
-  "version": "0.1.0a",
-  "main": "index.js",
-  "license": "MIT",
-  "dependencies": {
-    "fs-extra": "^4.0.2"
-  }
+    "name": "Bukket-Collection",
+    "version": "0.1.0a",
+    "main": "app.js",
+    "license": "MIT",
+    "dependencies": {
+        "asar": "^0.14.0",
+        "electron-packager": "^10.1.0",
+        "fs-extra": "^4.0.2"
+    }
 }
