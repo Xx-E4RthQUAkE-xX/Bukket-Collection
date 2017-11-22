@@ -1,2 +1,3 @@
-node_modules
-PepperFlash
+node_modules/
+PepperFlash/
+.vscode/
