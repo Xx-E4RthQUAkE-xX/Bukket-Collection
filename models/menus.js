@@ -22,7 +22,7 @@ const template = [{
         label: 'ツール',
         submenu: [{
                 label: 'スクリーンショット',
-                accelerator: 'Shift + F12',
+                accelerator: 'Shift + P',
                 click(item, focusedWindow) {
                     if (focusedWindow) capture(PATH, focusedWindow);
                 }

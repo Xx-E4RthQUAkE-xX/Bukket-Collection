@@ -15,6 +15,7 @@ const config = require('./config/config');
 
 const gameTitle = '艦隊これくしょん';
 const gameUrl = 'http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/';
+const userAgent = "Chrome/62.0.3202.94"
 const scrollX = 124;
 const scrollY = 77;
 const winWidth = 800;
@@ -34,9 +35,13 @@ app.on('ready', function() {
             plugins: true
         }
     });
+    let subwin = new BrowserWindow({
+        width: 800,
+        height: 250
+    });
     win.setMenu(null);
 
-    win.loadURL(gameUrl);
+    win.loadURL(gameUrl, { userAgent: userAgent });
 
     globalShortcut.register('f5', function() {
         console.log('Bukket Collection has been reloaded.');
@@ -60,12 +65,15 @@ app.on('ready', function() {
     win.on('closed', function() {
         console.log('Bukket Collection has been closed.');
         win = null;
+        subwin = null;
         app.quit();
     });
 
     template[2].submenu[1].checked = config.onAudioMuted;
     const menu = Menu.buildFromTemplate(template);
     Menu.setApplicationMenu(menu);
+
+    subwin.loadURL("file://" + __dirname + "/stats.html");
 });
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {
