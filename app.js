@@ -3,8 +3,11 @@
 const electron = require('electron');
 const path = require('path');
 const request = require('request');
+const fs = require('fs');
 const template = require('./models/menus');
 const execSync = require('child_process').execSync;
+const setWin = require('./setWin.json');
+const winPath = require('path').join(__dirname, 'setWin.json');
 
 const BrowserWindow = electron.BrowserWindow;
 const ipcMain = electron.ipcMain;
@@ -21,8 +24,10 @@ const scrollY = 77;
 const winWidth = 800;
 const winHeight = 502;
 
-app.commandLine.appendSwitch('ppapi-flash-path', __dirname + '/PepperFlash/PepperFlashPlayer.plugin');
-app.commandLine.appendSwitch('ppapi-flash-version', '27.0.0.187');
+const flash = execSync('mdfind  -onlyin ~/Library/Application\\ Support PepperFlashPlayer.plugin').toString().replace(/\r?\n/g, "");
+
+app.setPath('pepperFlashSystemPlugin', flash);
+app.commandLine.appendSwitch('ppapi-flash-path', app.getPath('pepperFlashSystemPlugin'));
 
 app.on('ready', function() {
     let win = new BrowserWindow({
@@ -35,13 +40,16 @@ app.on('ready', function() {
             plugins: true
         }
     });
-    let subwin = new BrowserWindow({
-        width: 800,
-        height: 250
-    });
+    //let subwin = new BrowserWindow({
+    //    width: 800,
+    //    height: 250
+    //});
     win.setMenu(null);
 
     win.loadURL(gameUrl, { userAgent: userAgent });
+
+    win.setPosition(setWin["x"], setWin["y"]);
+    win.setSize(setWin["width"], setWin["height"]);
 
     globalShortcut.register('f5', function() {
         console.log('Bukket Collection has been reloaded.');
@@ -62,18 +70,25 @@ app.on('ready', function() {
 
     });
 
+    win.on('close', function() {
+        let item = JSON.stringify(win.getBounds());
+        fs.writeFile(winPath, item);
+
+    })
+
     win.on('closed', function() {
-        console.log('Bukket Collection has been closed.');
         win = null;
-        subwin = null;
+        //subwin = null;
         app.quit();
+
+        console.log('Bukket Collection has been closed.');
     });
 
     template[2].submenu[1].checked = config.onAudioMuted;
     const menu = Menu.buildFromTemplate(template);
     Menu.setApplicationMenu(menu);
 
-    subwin.loadURL("file://" + __dirname + "/stats.html");
+    //subwin.loadURL("file://" + __dirname + "/stats.html");
 });
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {
